@@ -47,31 +47,55 @@ function App() {
       const data = await response.json();
       console.log('Task added:', data);
       setTasks((prevTasks) => [...prevTasks, data]);
+      getTasks();
+      
+      setTaskText('');
+      setTaskStatus('todo');
     } catch (error) {
       console.error('Error adding task:', error);
     }
   };
 
   // Function to update a task's status
-  async function updateTask(taskId, newStatus) {
-    try {
-      const taskToUpdate = { status: newStatus };
+  async function updateTask(taskId, currentStatus) {
+    let nextStatus = '';
 
+    // Determine next status based on the current status
+    if (currentStatus === 'todo') {
+      nextStatus = 'doing'; // From Todo to Doing
+    } else if (currentStatus === 'doing') {
+      nextStatus = 'done'; // From Doing to Done
+    } else {
+      nextStatus = currentStatus; // If it's already 'done', keep it as 'done'
+    }
+
+    try {
+      const taskToUpdate = { status: nextStatus };
+  
       const response = await fetch(`https://episodetrade-sharpmodular-3000.codio.io/tasks/${taskId}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(taskToUpdate),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to update task');
       }
 
-      console.log(`Task with ID: ${taskId} updated to ${newStatus}`);
-      getTasks(); // Refresh the task list after update
+      const updatedTask = await response.json();
+      console.log('Updated Task:', updatedTask);
+  
+      // Update status in the state
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === taskId ? { ...task, status: nextStatus } : task
+        )
+      );
+  
+      console.log(`Task with ID: ${taskId} updated to ${nextStatus}`);
     } catch (error) {
       console.error('Error updating task:', error);
     }
@@ -94,7 +118,7 @@ function App() {
 
       console.log(`Task with ID: "${taskId}" deleted`);
       // Remove the deleted task from the state
-      setTasks(tasks.filter((task) => task.id !== taskId));
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
     } catch (error) {
       console.error('Error deleting task:', error);
     }
@@ -107,9 +131,6 @@ function App() {
     const newTask = { text: taskText, status: taskStatus };
     console.log('New Task:', newTask);
     addTask(newTask);
-
-    setTaskText('');
-    setTaskStatus('todo');
   };
 
   useEffect(() => {
@@ -117,12 +138,13 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>Kanban Board</h1>
-
+    <div className='all-blocks'>
+      <h1> ⚙️ ⚙️ Kanban Board</h1>
       {/* Form to add a task */}
+     
       <form onSubmit={handleSubmit}>
-        <div>
+          <div className='form'>
+            <div className='form'>
             <input 
               type="text" 
               value={taskText} 
@@ -132,7 +154,7 @@ function App() {
             />
         </div>
 
-        <div>
+        <div className='form'>
             <select 
               value={taskStatus} 
               onChange={(e) => setTaskStatus(e.target.value)}>
@@ -141,8 +163,10 @@ function App() {
               <option value="done">Done</option>
             </select>
         </div>
-
+        <div className='form'>
         <button type="submit">Add Task</button>
+        </div>
+        </div>
       </form>
 
       <div className="kanban-columns">
@@ -152,16 +176,18 @@ function App() {
           <ul>
             {tasks.filter(task => task.status === 'todo').map(task => (
               <li key={task.id}>
-                {task.text}
+                <span className="task-text">{task.text}</span>
+                <div className="task-actions">
                 <button 
-                  onClick={() => updateTask(task.id, 'doing')} 
-                  disabled={task.status === 'doing'}
+                  onClick={() => updateTask(task.id, task.status)} 
+                  disabled={task.status === 'doing' || task.status === 'done'}
                 >
                 Doing
                 </button>
                 <button onClick={() => deleteTask(task.id)}>
-                  Delete
+                🗑️
                 </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -173,16 +199,18 @@ function App() {
           <ul>
             {tasks.filter(task => task.status === 'doing').map(task => (
               <li key={task.id}>
-                {task.text}
+                <span className="task-text">{task.text}</span>
+                <div className="task-actions">
                 <button 
-                  onClick={() => updateTask(task.id, 'done')} 
+                  onClick={() => updateTask(task.id, task.status)} 
                   disabled={task.status === 'done'}
                 >
                 Done
                 </button>
                 <button onClick={() => deleteTask(task.id)}>
-                  Delete
+                🗑️
                 </button>
+                </div>
               </li>
             ))}
           </ul>
@@ -194,16 +222,18 @@ function App() {
           <ul>
             {tasks.filter(task => task.status === 'done').map(task => (
               <li key={task.id}>
-                {task.text}
+                <span className="task-text">{task.text}</span>
+                <div className="task-actions">
                 <button onClick={() => deleteTask(task.id)}>
-                  Delete
+                🗑️
                 </button>
+                </div>
               </li>
             ))}
           </ul>
         </div>
       </div>
-    </div>
+      </div>
   );
 }
 

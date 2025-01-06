@@ -1,106 +1,179 @@
+/* Root Container */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  width: 100%;
 }
 
+/* Body Styling */
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  background-color: #121212;
+  color: #f0f0f0;
   margin: 0;
   padding: 0;
 }
 
+/* Header */
 h1 {
-  text-align: center;
-  margin-top: 20px;
-  color: #333;
+  font-size: 3.5rem;
+  margin-bottom: 50px;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
+.all-blocks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+/* Kanban Board Layout */
 .kanban-columns {
   display: flex;
   justify-content: space-between;
-  padding: 20px;
-  gap: 20px;
+  gap: 2px;
+  padding: 20px 0;
+  flex-wrap: nowrap;
 }
 
-.column {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  flex: 1;
-  padding: 10px;
-  min-width: 200px;
-}
-
-.column h2 {
-  text-align: center;
-  color: #444;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  background-color: #e0e7ff;
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 6px;
+/* Form Styling */
+.form {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #1f1f1f;
+  border-radius: 10px;
+  width: 100%;
+  min-width: 440px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 5px 10px; 
+  gap: 10px; 
+  flex-wrap: nowrap;
 }
 
-button {
-  background-color: #3137e3;
-  color: white;
-  border: none;
+/* Input, Select, and Button Styling (common for all) */
+.form input,
+.form select { 
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #444;
   border-radius: 4px;
-  padding: 5px 10px;
-  cursor: pointer;
+  background-color: #1f1f1f;
+  color: #ffffff;
+  flex: 1 1 40%;
+  box-sizing: border-box;
 }
 
-button:hover {
-  background-color: rgb(35, 35, 113);
+/* Button Styling */
+.form button {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #444;
+  background-color: #097635;
+  color: #efe5e5;
+  transition: background-color 0.2s ease-in-out;
+  flex: 1 1 30%;
 }
 
-button:disabled {
-  background-color: #dcdcdc;
-  cursor: not-allowed;
+.form button:hover {
+  background-color: #5ed364;
 }
 
-form {
+/* Select Styling */
+.form select {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+/* Individual Column */
+.column {
+  background-color: #1f1f1f;
+  border-radius: 10px;
+  flex: 1 1 270px;
+  padding: 20px;
+  min-width: 440px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+}
+
+.column h2 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #ffffff;
+  border-bottom: 2px solid #333333;
+  padding-bottom: 10px;
+}
+
+/* Task List */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  background-color: #097635;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-input[type="text"] {
-  padding: 10px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* Task Text */
+li .task-text {
+  flex-grow: 1; 
+  margin-right: 10px; 
+  color: #ffffff;
+  text-transform: uppercase;
 }
 
-select {
-  padding: 10px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+/* Buttons Flex Container */
+li .task-actions {
+  display: flex;
+  gap: 10px; 
+  justify-content: flex-end; 
 }
 
-button[type="submit"] {
-  background-color: #4caf50;
+.task-actions button {
+  background-color: #14191f;
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 10px 20px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }
 
-button[type="submit"]:hover {
-  background-color: #45a049;
+.task-actions button:hover {
+  background-color: #dde250;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .kanban-columns {
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .column {
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
+  .form input,
+  .form select,
+  .form button {
+    flex: 1 1 100%; /* Ensure form elements take full width on small screens */
+    min-width: 100%;
+  }
 }
