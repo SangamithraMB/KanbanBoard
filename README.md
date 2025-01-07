@@ -23,23 +23,26 @@ To set up the Kanban Board project locally, follow these steps:
 
 ### 1. Clone the repository
 
-```bash
+```
 git clone https://github.com/SangamithraMB/KanbanBoard.git
 cd KanbanBoard
+```
 
 ### 2. Install dependencies
 
 Install the required dependencies using pip:
 
-```bash
+```
 npm install
+```
 
 ### 3. Run the application
 
 To start the application, run the following command:
 
-```bash
+```
 npm run dev
+```
 
 The application will be accessible at http://localhost:5173 in your browser.
 
